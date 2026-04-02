@@ -15,6 +15,7 @@
 | E | Text Card | Text card for greetings, dividers, or extra details | Sep 2025 |
 | F | Quick Actions | Card with multiple shortcuts to key pages | Sep 2025 |
 | G | Icon Card | Profile info card with icons | April 2026 |
+| H | Dynamic Campaign Widget | Auto-populating widget showing all active campaigns relevant to the logged-in user | Feb–Mar 2026 |
 
 ---
 
@@ -175,59 +176,137 @@ System passes user_id and campaign_id (if campaign-based).
 
 ---
 
-## Widget: Active Campaigns (U210125)
+## Widget H: Dynamic Campaign Widget — Active Campaigns (U210125)
 
-**Sprint:** ND 2025
-**Description:** Auto-populating widget that displays all active campaigns relevant to the logged-in user. Unlike other widgets which require per-campaign manual configuration, this widget is configured once and automatically updates as campaigns are created, activated, or expired.
+**Sprint:** Feb–Mar 2026 (Feb 16 to March 17)
+**Document Version:** v3.0
+**Author:** Khushy A
 
-**Config steps:**
-1. Add widget in homepage builder → select widget type "Active Campaigns"
-2. Widget title is fixed as "Active Campaigns" (not editable)
-3. Configure visibility: select Role, Scope, Department, Designation (per U210092 visibility framework)
-4. Select default variables to display per sub-card (2 variables per campaign sub-card)
-   - Default variables: Points Earned, Target Progress (pre-selected)
-   - Admin can override with custom variables per campaign type
-5. Optionally configure visible variables per campaign type (e.g., Type D shows Achievement %, Type G shows Total Scans)
-6. Save — widget auto-populates from this point with no ongoing maintenance
+**Description:** Auto-populating widget that displays all active campaigns relevant to the logged-in user. Unlike other widgets which require per-campaign manual configuration, this widget is configured once and automatically updates as campaigns are created, activated, or expired. Solves the configuration overhead where admins previously had to manually create metric/multi-variable cards for each campaign and update them when campaigns change.
 
-**Master card structure:**
-- Outer container titled "Active Campaigns"
-- Contains 2–4 campaign sub-cards inside the master card
-- Each sub-card displays: Campaign Name, 2 configured metric variables
-- Each sub-card is clickable → navigates to that campaign's detail page
+---
 
-**Variables per sub-card:**
+### 1. End User — View Active Campaigns on Homepage
 
-| Variable | Source | Default |
-|----------|--------|---------|
-| Campaign Name | Campaign form (Section 3b) | Always shown |
-| Metric Variable 1 | Admin-configured or default (Points Earned) | Yes |
-| Metric Variable 2 | Admin-configured or default (Target Progress) | Yes |
+On login, the Dynamic Campaign Widget appears on the homepage as a master card titled "Active Campaigns" (if configured for the user's role/scope/designation). The master card contains 2 or 4 campaign sub-cards, each representing one active campaign the user is enrolled in.
 
-**Edge cases:**
+**Visibility & ordering conditions:**
+- End User is a participant in the campaign OR is a reporting manager of a Type D campaign participant
+- Campaign is between campaign start date and homepage visibility end date
+- Ordering: most recently created campaign first, oldest last
+
+**Default Variables per Campaign Type (End User / Participant):**
+
+| Campaign Type | Default Variable 1 | Default Variable 2 | Additional Options |
+|--------------|--------------------|--------------------|-------------------|
+| Type A (Points) | Points Earned | Points Redeemed | Points Earned, Points Redeemed, Point Balance, Points Expired, Campaign Start Date, Campaign Homepage End Date |
+| Type B (Points) | Points Earned | Points Redeemed | Points Earned, Points Redeemed, Point Balance, Points Expired, Campaign Start Date, Campaign Homepage End Date |
+| Type C (Claims) | Total Claims Submitted | Claims Approved | Points Earned, Points Redeemed, Point Balance, Points Expired, Campaign Start Date, Campaign Homepage End Date, Total Claims Submitted, Claims Approved, Claims Rejected, Claims Pending |
+| Type D (Data) | Points Calculated | Points Earned | 1. Campaign variables: Points Earned, Points Redeemed, Point Balance, Points Expired, Campaign Start Date, Campaign Homepage End Date. 2. Data Sources variable: linkage flow (same as metric card unique identifier matching) then select any column header from selected data sources table |
+| Type F (Referral) | Referrals Submitted | Referrals Converted* | Points Earned, Points Redeemed, Point Balance, Points Expired, Campaign Start Date, Campaign Homepage End Date, Referrals Submitted, Referrals Converted* |
+| Type G (Scan) | Scans Successful | Points Earned | Points Earned, Points Redeemed, Point Balance, Points Expired, Campaign Start Date, Campaign Homepage End Date, Scans Successful, Points Earned |
+
+\* Referrals Converted = referral code generated → referee downloaded app → submitted claim → claim approved.
+
+Each sub-card displays 2 default variables based on campaign type (table above) OR custom variables configured by the admin.
+
+**Sub-card behaviour:**
 
 | Scenario | Behaviour |
 |----------|-----------|
-| 0 active campaigns | Master card shows message: "User is not currently a part of any active campaigns" |
-| 1–4 active campaigns | All campaigns displayed as sub-cards |
-| 5+ active campaigns | First 4 displayed as sub-cards + "View All Campaigns" button at bottom, redirecting to My Campaigns page |
-| Campaign expires mid-session | Sub-card removed on next page load; no manual admin action needed |
-| New campaign activated | Sub-card auto-added on next page load for eligible users |
-| User not a participant in any campaign | Same as 0 campaigns — shows empty state message |
-| Campaign homepage visibility end date passed | Sub-card removed even if campaign is technically still active |
+| 0 active campaigns | Widget shows: "User is not currently a part of any active campaigns" |
+| 1–4 active campaigns | All displayed as sub-cards |
+| 5+ active campaigns | First 4 displayed + "View All Campaigns" button at bottom → redirects to My Campaigns page (end users) |
 
-**Click destination:**
+**Click destinations (End User):**
 
 | Element | Destination |
 |---------|-------------|
 | Campaign sub-card (tap anywhere) | /campaign/:id — campaign detail page |
 | "View All Campaigns" button | /my-campaigns — My Campaigns listing page |
 
-**Admin notes:**
-- This widget is configured once per dashboard. It does not need to be reconfigured when campaigns change.
-- Visibility follows the same Role + Scope + Department + Designation rules as all other widgets (U210092).
-- The widget respects the campaign's own participant list — a user only sees campaigns they are a participant in.
-- Campaign homepage visibility end date (set in campaign form, Section 3b) controls when a campaign disappears from this widget, not the campaign expiry date.
+---
+
+### 2. Admin — Add Dynamic Campaign Widget to Homepage
+
+Configure within: Settings > Dashboards > Homepage Builder
+
+#### a. Drag and Drop
+
+- New widget type "Active Campaigns" appears in the Homepage Builder alongside existing widget types
+- Description shown: "Dynamic widget card to show end user all the campaigns they are currently a part of"
+- Admin adds via single click (+ button), same as other widgets
+- Only ONE Dynamic Campaign Widget allowed per homepage layout. Error: "Active Widgets has already been added in this homepage"
+- Widget can be repositioned via drag-and-drop, same as other widgets
+
+#### b. Configure Custom Variables per Campaign
+
+**Config steps:**
+
+1. **Widget title** — Default: "Active Campaigns". Can be changed by admin (free text)
+2. **Select visible campaigns** — 2 or 4 campaigns visible (radio button)
+3. **Mode selection:**
+
+**Default Mode (System Generated):**
+- System automatically applies the 2 default variables per campaign type (per the Default Variables table above)
+- No further input required
+
+**Custom Mode:**
+- Step 1: Select specific campaign (dropdown — shows all active campaigns)
+  - System auto-checks: same campaign cannot be selected twice. Error: "Custom variables for this campaign have already been configured"
+  - No limit on number of campaigns with custom mode enabled
+- Step 2: For the selected campaign, configure x2 (twice — for each dashlet/metric within the sub-card):
+  - Metric 1/2 — dropdown with available custom variables (mandatory)
+  - Subtitle 1/2 — free text, auto-populated with variable title, editable (mandatory)
+  - Widget Unit 1/2 — free text (non-mandatory)
+  - Unit Placement 1/2 — radio button: prefix / suffix
+
+**If Type D campaign is selected (extra steps):**
+- Step 0: Select if config is for **Participants** or **Reporting Managers**
+  - If Reporting Managers selected → only Data Sources radio button is pre-selected (campaign variables limited to 2 data points: % of reportees earning points, total points earned by reportees)
+- Step 1: Select **Campaign Variable** or **Data Sources Table** (radio)
+- Step 2 (if Campaign Variable): Show dropdown with available variables per the Default Variables table
+- Step 3 (if Data Sources Table):
+  1. Select Data Sources table name
+  2. Select unique identifier (user)
+  3. Select unique identifier (data sources)
+  4. Configure per metric:
+     - Metric 1/2 — dropdown (mandatory)
+     - Subtitle 1/2 — free text, auto-populated, editable (mandatory)
+     - Widget Unit 1/2 — free text (non-mandatory)
+     - Unit Placement 1/2 — radio: prefix / suffix
+
+Changes saved as draft → applied on "Publish". Preview available before publish.
+
+---
+
+### 3. Manager — View Team Campaign Performance
+
+- The Dynamic Campaign Widget surfaces Type D campaigns where the manager's reportees are enrolled
+- 2 default sub-card variables: % of reportees earning points (who are part of the campaign), Total points earned by reportees
+- Clicking a sub-card navigates to campaign detail page with "Team Performance" tab pre-selected (if available)
+- "View All Campaigns" button redirects to **All Campaigns** (not "My Campaigns") for managers
+
+---
+
+### Edge Cases
+
+| Scenario | Behaviour |
+|----------|-----------|
+| Admin configures custom variables but data source table has no data for a user | Display "0" or "–" for that variable. Do not hide the sub-card — campaign is still active and user needs to know it exists |
+| Manager is both a participant AND has a direct reportee in a Type D campaign | If manager is enrolled as participant → show participant view (override). If manager is only a manager (not enrolled) → show the custom data source table configured for that campaign |
+| Campaign expires mid-session | Sub-card removed on next page load; no manual admin action needed |
+| New campaign activated | Sub-card auto-added on next page load for eligible users |
+| Campaign homepage visibility end date passed | Sub-card removed even if campaign is technically still active |
+
+---
+
+### Non-Functional Requirements
+
+- Widget data must load within 3 seconds for users with up to 10 active campaigns
+- Widget must not block or delay loading of other homepage widgets (async loading)
+- Campaign enrollment status: resolved on each page load
+- Variable data (points, claims, scans): reflects latest state with ≤ 5 minute lag
 
 ---
 
