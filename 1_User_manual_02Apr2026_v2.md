@@ -1803,6 +1803,148 @@ Filters are applied per session — there are no saved filter presets; each time
 - **Users:** Product Admin (configuration), all users (viewing)
 - **Navigation path:** Admin: Settings > Homepage Configuration; Users: Home page
 
+### Widget Sizing, Style & Content Reference
+
+The following specifications apply to all widgets rendered on the Widget-Based Dashboard. All widgets share a common visual language (shadow, border radius, background) but differ in dimensions based on their content type. The homepage grid is a 2-column layout on mobile (with some widgets spanning full width) and a flexible multi-column layout on web/tablet.
+
+**Common widget styles (all types):**
+
+| Property | Value |
+|----------|-------|
+| Corner radius | 12 px |
+| Card shadow | 0 2px 8px rgba(0,0,0,0.08) |
+| Card background | White (#FFFFFF) |
+| Card border | 1px solid #F0F0F0 |
+| Card padding | 16 px (mobile), 20 px (web) |
+| Title font | Semi-bold, 14px (mobile), 16px (web) |
+| Title colour | #333333 |
+| Value font | Bold, 20px (mobile), 24px (web) for primary values; Regular, 14px for secondary text |
+| Gap between widgets in grid | 12 px (mobile), 16 px (web) |
+| Font family | System default (platform inherits from app theme) |
+
+---
+
+#### Widget A: Status Card
+
+| Property | Mobile | Web |
+|----------|--------|-----|
+| Width | 50% of grid (half-width, 2-up layout) | 25% of grid (4-up layout) or 33% (3-up) |
+| Height | 80 px fixed | 90 px fixed |
+| Icon size | 24 × 24 px | 28 × 28 px |
+| Content layout | Icon (left) + Variable label + Yes/No badge (right-aligned) |
+| Yes badge | Green (#22C55E) chip with white text "Verified" |
+| No badge | Red (#EF4444) chip with white text "Not Verified" |
+| Icon visibility | Toggled via "Show icon" config (Yes/No) |
+
+---
+
+#### Widget B: Metric Card
+
+| Property | Mobile | Web |
+|----------|--------|-----|
+| Width | 50% of grid (half-width, 2-up layout) | 25% of grid or 33% |
+| Height | 100 px fixed | 110 px fixed |
+| Content layout | Title (top) → Value with unit prefix/suffix (center, large font) |
+| Value font size | 24px bold (mobile), 28px bold (web) |
+| Unit font size | 14px regular, same line as value |
+| Click indicator | Subtle right-chevron icon if clickable (U210100) |
+
+---
+
+#### Widget C: Progress Bar
+
+| Property | Mobile | Web |
+|----------|--------|-----|
+| Width | Full width (100%) | 50% or 100% (admin choice) |
+| Height | 120 px min | 130 px min |
+| Bar height | 12 px | 14 px |
+| Bar fill colour | Primary brand colour (from theme) |
+| Bar background | #E5E7EB (light grey) |
+| Content layout | Widget name (top) → Numerator / Denominator text → Progress bar → Percentage value (right of bar or below) |
+| Percentage font | 16px bold |
+
+---
+
+#### Widget D: Multi-Variable Campaign Card
+
+| Property | Mobile | Web |
+|----------|--------|-----|
+| Width | Full width (100%) | 50% or 100% (admin choice) |
+| Height (4 metrics) | 160 px | 180 px |
+| Height (6 metrics) | 220 px | 240 px |
+| Content layout | Title (top) → 2×2 or 2×3 metric grid inside card |
+| Individual metric | Label (top, 12px grey) → Value + Unit (bottom, 16px bold) |
+| Grid gap | 12 px between metric cells |
+| Dividers | 1px #F0F0F0 lines between metric cells |
+
+---
+
+#### Widget E: Text Card
+
+| Property | Mobile | Web |
+|----------|--------|-----|
+| Width | Admin-configured (px or %) | Same |
+| Height | Auto (based on text content) |
+| Min height | 60 px | 70 px |
+| Max text length | 100 characters, multi-line |
+| Text formatting | Rich text: bold, italic, underline, bullets |
+| Alignment | Left / Center / Right (admin-configured) |
+| Variable rendering | Profile variables (name, email, entity, department, scope, tier) auto-populate from user profile at render time |
+| Variable font | Same as surrounding text; no special formatting unless admin applies rich text styling |
+
+---
+
+#### Widget F: Quick Actions / Shortcuts
+
+| Property | Mobile | Web |
+|----------|--------|-----|
+| Width | Full width (100%) | Full width (100%) |
+| Height | Auto (based on number of shortcuts) | Auto |
+| Layout | Fixed grid, center-aligned; admin arranges via drag-and-drop |
+| Individual shortcut | Icon (32 × 32 px) above Label (12px, center-aligned, 15 char limit) |
+| Grid columns | 4 per row (mobile), 6 per row (web) |
+| Shortcut tap area | 64 × 64 px minimum tap target |
+| Icon source | Predefined icon set (shared with Icon Card widget) |
+| Icon colour | Monochrome, inherits from theme primary colour |
+
+---
+
+#### Active Campaigns Widget (U210125)
+
+| Property | Mobile | Web |
+|----------|--------|-----|
+| Master card width | Full width (100%) | Full width (100%) or 50% |
+| Master card min-height | 200 px | 220 px |
+| Master card title | "Active Campaigns" — fixed, 16px semi-bold |
+| Sub-card layout | Vertical stack (mobile), 2-up horizontal row (web) |
+| Sub-card height | 80 px each | 90 px each |
+| Sub-card content | Campaign Name (14px semi-bold, left) + 2 metric values (right-aligned, 14px regular) |
+| Sub-card tap area | Entire sub-card is clickable → campaign detail page |
+| Sub-card divider | 1px #F0F0F0 between sub-cards (mobile) |
+| "View All Campaigns" button | Full-width text button at bottom, 14px, primary colour, no fill |
+| Empty state | Centered text: "User is not currently a part of any active campaigns" — 14px, #999999 |
+| Max visible sub-cards | 4 (with "View All" button if 5+) |
+
+---
+
+#### Widget G: Icon Card (April 2026)
+
+| Property | Mobile | Web |
+|----------|--------|-----|
+| Width | Full width (100%) | 50% or 100% (admin choice) |
+| Min-height | 180 px | 200 px |
+| Max-height | Auto (grows with variable count); scrolls internally if exceeding ~450 px on mobile |
+| Row height per variable | 40 px | 44 px |
+| Row gap | 8 px | 10 px |
+| Icon size (standard) | 24 × 24 px | 28 × 28 px |
+| Tier icon size | 32 × 32 px (from Tier Management logo) | 36 × 36 px |
+| Status badge size | 20 × 20 px | 24 × 24 px |
+| Content layout per row | Icon (left, 24px) + Variable label (14px, left of center) + Value (14px, right-aligned) |
+| Tier row | Tier Logo (with background colour from Tier Management) + "Tier" label + Tier name value |
+| Designation row | No icon; label + value only (text-only row, left-aligned) |
+| Status rows (Payout/PAN) | Icon (left) + Label + Yes/No badge (same style as Widget A) |
+| Row order | Admin-configured via drag-and-drop |
+
 ### Screen: Analytical Dashboard (U210122)
 - **Purpose:** Desktop-only consolidated analytics with 4 sections: Point Summary, User Summary (User Count + Payout + PAN + Login Trend), Campaign Detail, Campaign Summary Cards
 - **Key elements:** Point Summary (month-by-month cluster bar chart with FY toggle, 6-month scroll), User Summary (total/active/licensed users + payout status + PAN status + monthly unique visitors), Campaign Detail table (all campaigns in FY with type labels, % earning points), Campaign Summary Cards

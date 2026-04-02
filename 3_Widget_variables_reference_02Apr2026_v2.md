@@ -175,6 +175,62 @@ System passes user_id and campaign_id (if campaign-based).
 
 ---
 
+## Widget: Active Campaigns (U210125)
+
+**Sprint:** ND 2025
+**Description:** Auto-populating widget that displays all active campaigns relevant to the logged-in user. Unlike other widgets which require per-campaign manual configuration, this widget is configured once and automatically updates as campaigns are created, activated, or expired.
+
+**Config steps:**
+1. Add widget in homepage builder → select widget type "Active Campaigns"
+2. Widget title is fixed as "Active Campaigns" (not editable)
+3. Configure visibility: select Role, Scope, Department, Designation (per U210092 visibility framework)
+4. Select default variables to display per sub-card (2 variables per campaign sub-card)
+   - Default variables: Points Earned, Target Progress (pre-selected)
+   - Admin can override with custom variables per campaign type
+5. Optionally configure visible variables per campaign type (e.g., Type D shows Achievement %, Type G shows Total Scans)
+6. Save — widget auto-populates from this point with no ongoing maintenance
+
+**Master card structure:**
+- Outer container titled "Active Campaigns"
+- Contains 2–4 campaign sub-cards inside the master card
+- Each sub-card displays: Campaign Name, 2 configured metric variables
+- Each sub-card is clickable → navigates to that campaign's detail page
+
+**Variables per sub-card:**
+
+| Variable | Source | Default |
+|----------|--------|---------|
+| Campaign Name | Campaign form (Section 3b) | Always shown |
+| Metric Variable 1 | Admin-configured or default (Points Earned) | Yes |
+| Metric Variable 2 | Admin-configured or default (Target Progress) | Yes |
+
+**Edge cases:**
+
+| Scenario | Behaviour |
+|----------|-----------|
+| 0 active campaigns | Master card shows message: "User is not currently a part of any active campaigns" |
+| 1–4 active campaigns | All campaigns displayed as sub-cards |
+| 5+ active campaigns | First 4 displayed as sub-cards + "View All Campaigns" button at bottom, redirecting to My Campaigns page |
+| Campaign expires mid-session | Sub-card removed on next page load; no manual admin action needed |
+| New campaign activated | Sub-card auto-added on next page load for eligible users |
+| User not a participant in any campaign | Same as 0 campaigns — shows empty state message |
+| Campaign homepage visibility end date passed | Sub-card removed even if campaign is technically still active |
+
+**Click destination:**
+
+| Element | Destination |
+|---------|-------------|
+| Campaign sub-card (tap anywhere) | /campaign/:id — campaign detail page |
+| "View All Campaigns" button | /my-campaigns — My Campaigns listing page |
+
+**Admin notes:**
+- This widget is configured once per dashboard. It does not need to be reconfigured when campaigns change.
+- Visibility follows the same Role + Scope + Department + Designation rules as all other widgets (U210092).
+- The widget respects the campaign's own participant list — a user only sees campaigns they are a participant in.
+- Campaign homepage visibility end date (set in campaign form, Section 3b) controls when a campaign disappears from this widget, not the campaign expiry date.
+
+---
+
 ## Widget G: Icon Card (April 2026)
 
 | # | Variable | Icon Type |

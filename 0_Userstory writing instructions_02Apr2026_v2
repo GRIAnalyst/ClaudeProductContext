@@ -1,0 +1,141 @@
+# 0. User Story Writing Instructions — 1 April 2026
+
+## Purpose
+
+These guidelines govern how user stories are written for the My Incentives platform. They ensure consistency, avoid duplication, and keep stories focused on what is genuinely new. Claude and all contributors must follow these instructions when drafting user stories.
+
+---
+
+## Rule 1: Read Before You Write
+
+Before drafting any new user story, thoroughly read all existing related features and user stories in the project knowledge. This includes:
+
+- `1_User_manual_01Apr2026.md` — the full product reference manual
+- `2_Activities_roles_reference_01Apr2026.md` — the complete role-activity matrix
+- `3_Widget_variables_reference_01Apr2026.md` — the widget master with all variables, config steps, and sizing
+- Any previously written user stories for adjacent features
+
+Search the project knowledge by keyword before assuming something is new. If it already exists, reference it — don't rewrite it.
+
+---
+
+## Rule 2: Never Duplicate Existing Feature Specs
+
+If a behaviour, config step, or acceptance criterion is already fully documented in an existing feature or user story, **do not restate it**. Instead, reference it by story ID or section name.
+
+**Examples of what NOT to repeat:**
+
+| Already exists in... | Do NOT rewrite in new stories |
+|----------------------|-------------------------------|
+| U210092 / U210100 (Widget Builder) | Widget visibility rules (Role, Scope, Department, Designation), drag-and-drop ordering, mandatory widget toggle, preview functionality |
+| Widget A: Status Card | Yes/No badge logic, verification status rendering, icon toggle behaviour |
+| Widget F: Quick Actions | Predefined icon set description, icon picker UI, label character limits |
+| Homepage Builder | Dashboard type selection, Role + Scope + Department + Designation assignment, navigation path |
+| Tier Management (Section 4g) | Tier segment setup, tier logo upload, tier movement matrix, scheduler |
+| Section 3b (Campaign form) | Campaign homepage visibility end date, participant wallet types, leaderboard configuration |
+
+**How to reference instead:**
+
+> ✅ "Visibility rules follow the standard widget visibility framework (U210092)."
+>
+> ✅ "Status badge rendering follows the same Yes/No logic as Widget A (Status Card) — see Widget Variables Reference."
+>
+> ✅ "Icon selection uses the predefined icon set shared with Widget F (Quick Actions)."
+>
+> ❌ "The admin can set visibility by selecting Role (multi-select), Scope (multi-select), Department (multi-select), and Designation (multi-select). Each combination of Role + Scope + Department + Designation maps to one dashboard..." ← This is already documented in U210092. Don't repeat it.
+
+---
+
+## Rule 3: Keep Stories Focused on What Is New
+
+A user story should only contain acceptance criteria, config steps, and specifications for behaviour that does not already exist in the product. Everything else is a pointer.
+
+**A well-focused story contains:**
+
+- What is being added or changed (the new widget type, new variable, new config option)
+- New config steps specific to this feature
+- New UI elements or interactions that don't exist elsewhere
+- New edge cases unique to this feature
+- New dimensions/sizing if relevant to design
+- References (by ID) to existing features this story depends on or extends
+
+**A well-focused story does NOT contain:**
+
+- Re-explanations of how the widget builder works
+- Re-descriptions of the homepage builder navigation path
+- Re-statements of how visibility rules are applied
+- Re-documentation of how tier logos are uploaded
+- Re-listing of predefined icon set contents
+- General platform concepts (what scopes are, what roles are, etc.)
+
+---
+
+## Rule 4: User Story Structure
+
+Follow this structure for all user stories:
+
+1. **Header:** Story ID, Sprint, Priority, Status
+2. **User Story statement:** "As a [role], I want to [action], so that [outcome]."
+3. **Background & Context:** 2–3 sentences explaining why this feature is needed and how it relates to existing features. Include references to Widget Master variable numbers if applicable.
+4. **Scope:** In-scope / Out-of-scope (be explicit about what this story does NOT cover)
+5. **Variables / Data Reference:** Table of variables, sources, and any special behaviour (from Widget Master)
+6. **Acceptance Criteria — Admin Configuration:** Numbered ACs for the admin-facing setup flow. Only include steps that are NEW. Reference existing frameworks by ID for shared behaviour.
+7. **Acceptance Criteria — End-User Experience:** Numbered ACs for what the user sees. Focus on rendering, layout, and data population specific to this feature.
+8. **Dimensions & Sizing:** If relevant (especially for new widget types), include a table of card/component dimensions for mobile and web. Cross-reference the Widget Sizing Reference in the User Manual if common styles apply.
+9. **Edge Cases:** Table of scenarios and expected behaviours unique to this feature.
+10. **Dependencies:** Table of prerequisite features, data sources, and APIs.
+11. **Design & Dev Notes:** Brief implementation notes — what's reusable from existing features, what's net-new.
+
+---
+
+## Rule 5: Sizing and Style
+
+For any feature that introduces a new visual component (widget, card, modal, page section):
+
+- Always include explicit dimensions (width, height, padding, spacing) for both mobile and web
+- Reference the Widget Sizing, Style & Content Reference section in the User Manual for common styles (corner radius, shadow, fonts, colours)
+- Only specify sizing values that differ from the common styles — don't restate the common values
+- If the new component reuses an existing component's sizing (e.g., same badge style as Widget A), say so and reference it rather than re-specifying the pixel values
+
+---
+
+## Rule 6: Naming and Numbering
+
+- User story IDs follow the format: U2101XX (incrementing from the last used ID)
+- Check the User Manual and existing stories for the last used ID before assigning a new one
+- Widget variable numbering continues from the Widget Master (#1–3 for Widget A, #4–10 for Widget G, etc.)
+- Sprint labels should match the current sprint/month (e.g., "April 2026")
+
+---
+
+## Rule 7: User Manual Updates
+
+- New features should only be added to `1_User_manual_01Apr2026.md` after they are finalized and approved — not at draft stage
+- When updating the manual, prioritize incorporating additional guidance, clarifications, and corrections around existing features before documenting new features
+- The Widget Variables Reference (`3_Widget_variables_reference_01Apr2026.md`) should be updated in parallel with story finalization to keep the master reference current
+
+---
+
+## Rule 8: No Duplicate Lists
+
+Any list should appear exactly once across all project knowledge and user stories. If a set of variables, pages, conditions, or options is defined in one place (like the Variables Reference table), every other part of the story should say "as listed in [section name] above" — never re-list.
+
+This applies to:
+
+- Variable lists (e.g., widget variables, campaign metrics)
+- Shortcut lists (e.g., Quick Actions shortcut set)
+- Status options (e.g., Yes/No badge states, verification statuses)
+- Role lists (e.g., admin roles, user roles)
+- Campaign types (e.g., Type D, Type G specifics)
+- Page/screen lists (e.g., click destinations, navigation targets)
+- Configuration option sets (e.g., visibility dropdowns, icon sets)
+
+**How to apply this rule:**
+
+> ✅ "Sub-card metric variables are as listed in the Variables per sub-card table in the Widget Variables Reference (Active Campaigns section)."
+>
+> ✅ "Available shortcuts follow the predefined shortcut set as listed in Widget F: Quick Actions."
+>
+> ❌ Re-listing "Points Earned, Target Progress, Achievement %, Total Scans..." in an acceptance criterion when these are already enumerated in the Variables Reference.
+
+If you need to call out a specific item from a list for context (e.g., to explain an edge case), quote only that single item and reference the full list by section name.
